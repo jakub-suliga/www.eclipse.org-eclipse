@@ -97,6 +97,84 @@ ul {padding-left: 13px;}
         </p>
       </td>
   </tr>
+  <tr id="rescaleOnRuntimePreference"> <!-- https://github.com/eclipse-platform/eclipse.platform.ui/pull/2461 -->
+    <td class="title">Enhanced Monitor-Specific UI Scaling (Experimental, Windows only)</td>
+    <td class="content">
+      <p>
+        In the previous release, a preference to enable an improved, monitor- and resolution-specific UI scaling on
+        Windows
+        was introduced (see <a href="../4.34/platform.php#rescale-on-runtime-preference">this news</a>). The feature
+        has been largely improved since then.
+        The feature makes each window adapt its scaling to the monitor it is currently placed on in a sharp,
+        resolution-specific way and without requiring the application to restart.
+        When using multiple windows, each of them will adapt its scaling to the monitor it is placed on.
+        When enabled, this new feature replaces the current, limited scaling support for high-resolution monitors, which
+        initializes the application's window according to the scaling of the primary monitor at application startup and
+        produces blurry scaling when moving the window to another monitor unless you restart the application.
+      </p>
+      <p>
+        To enable this feature, check the <i>Monitor-specific UI scaling</i> box on the <b>Appearance</b> preference page
+        (<b>Window > Preferences > General > Appearance</b>), as shown in the image below.
+        The feature is still under development, thus marked as <i>experimental</i> and disabled by default. We encourage
+        users to <b>explore this feature</b> and <b>share their feedback</b> to help us improve the functionality.
+      </p>
+      <p>
+        <img src="images/rescaling_setting-preference.png" alt="Monitor-Specific UI Rescaling Preference" width="600">
+      </p>
+      <p>
+        The images below demonstrate the scaling behavior in an extract of an Eclipse application when moving the window
+        from a primary monitor with 100% scaling to another monitor with 200% scaling, first having the feature disabled
+        and
+        second having it enabled.
+      </p>
+      <p>
+        With monitor-specific UI rescaling <b>disabled</b>:
+        <img src="images/rescaling_disabled.png" alt="Monitor-Specific UI Rescaling Disabled" width="600">
+      </p>
+      <p>
+        With monitor-specific UI rescaling <b>enabled</b>:
+        <img src="images/rescaling_enabled.png" alt="Monitor-Specific UI Rescaling Enabled" width="600">
+      </p>
+    </td>
+  </tr>
+  <tr id="edgeBrowserDefault"> <!-- https://github.com/eclipse-platform/eclipse.platform.swt/issues/1466 -->
+    <td class="title">Edge as Default Browser on Windows</td>
+    <td class="content">
+      <p>
+        Edge replaces Internet Explorer as the default browser instantiated by SWT. Internet Explorer is outdated and out of
+        maintenance. It is replaced with the WebView2 engine used by Edge. Switching to this modern engine will ensure that
+        use cases keep working or enables uses cases that are not working with Internet Explorer anymore or have never been
+        working with it. As an example, if an Eclipse application is executed in dark mode, according CSS styling of web
+        pages will be applied if embedded via:<br>
+        <code>@media (prefers-color-scheme: dark) { ... }</code>
+      </p>
+      <p>
+        In consequence, every SWT- and Eclipse-based product will by default now create instances of the <code>Browser</code>
+        class based on Edge when running on Windows. Some notable examples are the welcome page and help in Eclipse products
+        as well as the Javadoc view and the element info popups.
+      </p>
+      <p>
+        <b>Feedback:</b> In case you experience any issues or limitations with the Edge browser implementation, please report
+        them back in the umbrella issue (<a href="https://github.com/eclipse-platform/eclipse.platform.swt/issues/1466">#1466</a>).
+      </p>
+      <p>
+        In case you want to or need to still use Internet Explorer in your Eclipse product, you can:
+        <ul>
+          <li>Switch to Internet Explorer for a complete product by setting the VM argument (for example in your
+            <i>eclipse.ini</i>: <code>-Dorg.eclipse.swt.browser.DefaultType=IE</code>
+          </li>
+          <li>Programmatically create a single browser instance with Internet Explorer by passing the flag
+            <code>SWT.IE</code> to the browser constructor
+          </li>
+          <li>
+            Create a fragment for host plug-in <code>org.eclipse.swt</code> containing a class with qualified name
+            <code>org.eclipse.swt.browser.BrowserInitializer</code> that sets the system property
+            <code>-Dorg.eclipse.swt.browser.DefaultType=IE</code> in its static initializer.
+          </li>
+        </ul>
+      </p>
+    </td>
+  </tr>
 
   <!-- ******************* End of General Updates ************************************* -->
   <tr><td colspan="2"/></tr>
